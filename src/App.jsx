@@ -1,43 +1,53 @@
 import { useState } from 'react'
 import './App.scss'
 import Card from './components/Card/Card'
-
+import Header from './components/Header'
+import Drawer from './components/Drawer/Drawer'
+const arr = [
+{
+  title: "Мужские кросовки найк Блэйзер", 
+  price: 120,
+  imageUrl: '/img/sneakers/1.jpg'
+},
+{
+  title: "Мужские кросовки найк Эйер", 
+  price: 155,
+  imageUrl: '/img/sneakers/2.jpg'
+},
+{
+  title: "Мужские кросовки найк Kaka", 
+  price: 77,
+  imageUrl: '/img/sneakers/3.jpg'
+},
+{
+  title: "Мужские кросовки найк Vop", 
+  price: 100,
+  imageUrl: '/img/sneakers/4.jpg'
+},
+]
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
     <div className="wrapper clear">
-    <header className='d-flex justify-between align-center p-40 '>
-      <div className="d-flex align-center">
-      <img width={40} height={40} src="/img/logo.png" alt="" />
-      <div className='headerInfo'>
-      <h3 className='text-uppercase'>React Sneakers</h3> 
-      <p>Магазин лучших кросовок</p>
-      </div>
-      </div>
-      <ul className='headerRight'>
-        <li className='mr-30'>
-          <img width={18} height={18} src="/img/user.svg" alt="" />
-          <span>120 euro</span>
-        </li>
-        <li>
-          <img width={18} height={18} src="/img/cart.svg" alt="" />
-        </li>
-      </ul>
-    </header>
+   <Header/>
+   <Drawer/>
+
     <div className="content p-40">
       <h1 className='mb-40'>все кроссовки</h1> 
       <div className="search-block">
         <img src="img/search.svg" alt="Search" />
         <input type="text" placeholder='Search' />
       </div>
+
 <div className='d-flex'>
-     <Card/>
-     <Card/>
-     <Card/>
-     <Card/> 
-     <Card/>
+  {
+    arr.map((el) => (
+      <Card title={el.title} price={el.price} imageUrl={el.imageUrl}/>
+    ))
+  }
+    
 
 </div>
     </div>
