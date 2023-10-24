@@ -3,6 +3,7 @@ import './App.scss'
 import Card from './components/Card/Card'
 import Header from './components/Header'
 import Drawer from './components/Drawer/Drawer'
+
 const arr = [
 {
   title: "Мужские кросовки найк Блэйзер", 
@@ -26,13 +27,13 @@ const arr = [
 },
 ]
 function App() {
-  const [count, setCount] = useState(0)
+  const [cartOpened, setCartOpened] = useState(false)
 
   return (
     <>
     <div className="wrapper clear">
-   <Header/>
-   <Drawer/>
+   <Header onClickCart={()=> setCartOpened(true)}/>
+   {cartOpened ? <Drawer onCloseCart={()=>setCartOpened(false)}/> : null}
 
     <div className="content p-40">
       <h1 className='mb-40'>все кроссовки</h1> 
@@ -44,7 +45,14 @@ function App() {
 <div className='d-flex'>
   {
     arr.map((el) => (
-      <Card title={el.title} price={el.price} imageUrl={el.imageUrl}/>
+      <Card 
+      title={el.title} 
+      price={el.price} 
+      imageUrl={el.imageUrl}
+      // addtoTheCart={()=> console.log('Добавили в закладки')}
+      // onFavorite = {() => console.log ('Нажали плюс')}
+      />
+      
     ))
   }
     
