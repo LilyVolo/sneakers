@@ -1,9 +1,9 @@
-function Drawer() {
+function Drawer({onCloseCart}) {
     return (
         <div  className="overlay">
             <div className="drawer">
                 <h2 className="d-flex justify-between mb-30">
-                    Корзина <img className="cu-p" src="/img/btn-remove.svg" alt="Remove" />
+                    Корзина <img onClick={onCloseCart} className="cu-p" src="/img/btn-remove.svg" alt="Remove" />
                 </h2>
 
                 <div className="items">
