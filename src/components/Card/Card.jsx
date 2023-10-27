@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from './Card.module.scss';
-console.log(styles)
+
 
 function Card(props) {
   const [isAdded, setIsAdded] = useState(false);
@@ -12,7 +12,7 @@ setIsAdded(!isAdded)
   return (
     <div className={styles.card}>
       <div className={styles.favorites}>
-        <img src="/img/unliked.svg" alt="Unliked" onClick={props.onFavorite} />
+        <img className={styles.plus} src="/img/unliked.svg" alt="Unliked" onClick={props.onFavorite} />
       </div>
         <img width={133} height={122} src={props.imageUrl} alt="sneakers" />
         <h5>М{props.title}</h5>
