@@ -2,26 +2,27 @@ import { useState } from 'react';
 import styles from './Card.module.scss';
 
 
-function Card(props) {
+function Card({title, imageUrl, price, addtoTheCart, id, onFavorite}) {
   const [isAdded, setIsAdded] = useState(false);
 
-function addtoTheCart(){
+function putToTheCart(){
+  addtoTheCart({title, imageUrl, price, id})
 setIsAdded(!isAdded)
 }
 
   return (
     <div className={styles.card}>
       <div className={styles.favorites}>
-        <img className={styles.plus} src="/img/unliked.svg" alt="Unliked" onClick={props.onFavorite} />
+        <img className={styles.plus} src="/img/unliked.svg" alt="Unliked" onClick={onFavorite} />
       </div>
-        <img width={133} height={122} src={props.imageUrl} alt="sneakers" />
-        <h5>М{props.title}</h5>
+        <img width={133} height={122} src={imageUrl} alt="sneakers" />
+        <h5>{title}</h5>
         <div className='d-flex justify-between align-center'>
           <div className='d-flex flex-column'>
           <span>Цена:</span>
-          <b>{props.price}</b>  
+          <b>{price}</b>  
           </div>
-          <img className={styles.plus} onClick={addtoTheCart} 
+          <img className={styles.plus} onClick={putToTheCart} 
             src={isAdded ? "/img/btn-checked.svg": "/img/btn-plus.svg"} alt="plus" />
         </div>
       </div>

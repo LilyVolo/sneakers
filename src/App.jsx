@@ -7,11 +7,7 @@ import Drawer from './components/Drawer/Drawer'
 
 function App() {
   const [items, setItems] = useState([])
-  const [cartitems, setCartItems] = useState([{
-    "title": "Мужские кросовки найк Vop", 
-    "price": 100,
-    "imageUrl": "/img/sneakers/9.jpg"
-  }
+  const [cartitems, setCartItems] = useState([
   ])
   const [cartOpened, setCartOpened] = useState(false)
 
@@ -25,6 +21,26 @@ function App() {
     })
   }
 
+  function handleAddedtoCart(obj) {
+  
+    const objExistsInCart = cartitems.some(item => item.id === obj.id);
+    
+    if (!objExistsInCart)
+    {
+      setCartItems([...cartitems, obj])
+    
+    }
+    else {
+      const updatedCart = cartitems.filter(el => el.id !== obj.id);
+      setCartItems(updatedCart);
+    }
+  }
+
+  function handleRemove (itemToRemove)  {
+    const updatedItems = cartitems.filter(item => item.id !== itemToRemove);
+    setCartItems(updatedItems);
+  }
+
   useEffect(() => {
     loadFromBack ()
   }, []);
@@ -33,7 +49,8 @@ function App() {
     <>
     <div className="wrapper clear">
    <Header onClickCart={()=> setCartOpened(true)}/>
-   {cartOpened ? <Drawer items={cartitems} onCloseCart={()=>setCartOpened(false)}/> : null}
+   {cartOpened ? <Drawer items={cartitems} onDeleteFromCart={(itemToRemove)=> handleRemove(itemToRemove)}
+   onCloseCart={()=>setCartOpened(false)}/> : null}
 
     <div className="content p-40">
       <h1 className='mb-40'>все кроссовки</h1> 
@@ -45,12 +62,14 @@ function App() {
 <div className='d-flex flex-wrap'>
   { 
     items.map((el) => (
-      <Card 
+     
+      <Card key={el.id}
+      id={el.id}
       title={el.title} 
       price={el.price} 
       imageUrl={el.imageUrl}
-      // addtoTheCart={()=> console.log('Добавили в закладки')}
-      // onFavorite = {() => console.log ('Нажали плюс')}
+      addtoTheCart={(el)=>  handleAddedtoCart(el)}
+      onFavorite = {() =>  console.log(el)}
       />
       
     ))

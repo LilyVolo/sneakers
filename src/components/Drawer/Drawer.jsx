@@ -1,8 +1,8 @@
 import styles from './Drawer.module.scss'
 
-function Drawer({onCloseCart, items = []}) {
+function Drawer({onCloseCart, items = [], onDeleteFromCart}) {
 
-    // console.log(styles)
+
 
     return (
         <div  className={styles.overlay}>
@@ -12,20 +12,26 @@ function Drawer({onCloseCart, items = []}) {
                 </h2>
 
                 <div className="items">
-                {items.map((el) => {
-                    <div className="cartItem d-flex align-center mb-20">
-                    <div
+                    
+                  
+                 {items.map((el) => {
+                 return (
+
+                    <div key={el.id} className="cartItem d-flex align-center mb-20">
+                    <div 
                         style={{ backgroundImage: `url(${el.imageUrl})` }}
                         className="cartItemImg"></div>
 
                     <div className="mr-20 flex">
                         <p className="mb-5">{el.title}</p>
                         <b>{el.price}</b>
-                    </div>
-                    <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove" />
-                </div>
+                 </div>
+                 <img className="removeBtn" onClick={()=>onDeleteFromCart(el.id)}
+                 src="/img/btn-remove.svg" alt="Remove" />
+             </div>
+                )
 
-                })}
+                })} 
                 </div>
 
                 <div className="cartTotalBlock">
