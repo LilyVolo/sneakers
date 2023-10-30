@@ -7,9 +7,9 @@ import Drawer from './components/Drawer/Drawer'
 
 function App() {
   const [items, setItems] = useState([])
-  const [cartitems, setCartItems] = useState([
-  ])
+  const [cartitems, setCartItems] = useState([])
   const [cartOpened, setCartOpened] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
 
   function loadFromBack (){
     fetch ('https://65397c28e3b530c8d9e872ae.mockapi.io/items')
@@ -41,6 +41,10 @@ function App() {
     setCartItems(updatedItems);
   }
 
+  function onSearch (e) {
+    setSearchValue(e.target.value)
+  }
+
   useEffect(() => {
     loadFromBack ()
   }, []);
@@ -52,16 +56,33 @@ function App() {
    {cartOpened ? <Drawer items={cartitems} onDeleteFromCart={(itemToRemove)=> handleRemove(itemToRemove)}
    onCloseCart={()=>setCartOpened(false)}/> : null}
 
-    <div className="content p-40">
-      <h1 className='mb-40'>все кроссовки</h1> 
+    <div className="content p-40 ">
+      <div className='mb-40 d-flex align-center justify-between'>
+
+      <h1>{searchValue ? `Поиск по запросу: ${searchValue}` : 'Все кросовки'}
+      </h1> 
+      </div>
       <div className="search-block">
         <img src="img/search.svg" alt="Search" />
-        <input type="text" placeholder='Search' />
+
+        {searchValue && 
+        <img
+        onClick={()=> setSearchValue('')}
+        className="clear cu-p" 
+        src="/img/btn-remove.svg" 
+        alt="Close" />}
+
+        <input 
+        onChange={onSearch}
+        value={searchValue} 
+        type="text" 
+        placeholder='Search' />
       </div>
 
 <div className='d-flex flex-wrap'>
-  { 
-    items.map((el) => (
+  {items
+  .filter((el) => el.title.toLowerCase().includes(searchValue))
+  .map((el) => (
      
       <Card key={el.id}
       id={el.id}
