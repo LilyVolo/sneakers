@@ -4,6 +4,7 @@ import axios from 'axios'
 import Card from './components/Card/Card'
 import Header from './components/Header'
 import Drawer from './components/Drawer/Drawer'
+const API_URL = 'http://localhost:5005/api'
 
 
 function App() {
@@ -14,18 +15,22 @@ function App() {
 
 
   function loadFromBack (){
-    axios.get('https://65397c28e3b530c8d9e872ae.mockapi.io/items').then((res) => {
+    axios.get(`${API_URL}/items`).then((res) => {
+      
       setItems(res.data)
+    
     });
-    axios.get('https://65397c28e3b530c8d9e872ae.mockapi.io/cart').then((res) => {
+    axios.get(`${API_URL}/drawer`).then((res) => {
       setCartItems(res.data)
+      console.log(cartitems, 'check')
     })
     
   }
 
   function handleAddedtoCart(obj) {
-    axios.post('https://65397c28e3b530c8d9e872ae.mockapi.io/cart', obj) 
+    axios.post(`${API_URL}/drawer/addToDrawer`, obj) 
     setCartItems([...cartitems, obj])
+    console.log(cartitems)
     }
     // const objExistsInCart = cartitems.some(item => item.id === obj.id);
     
@@ -40,8 +45,9 @@ function App() {
     // }
   //}
   function onDeleteFronCart (itemToRemove) {
-    axios.delete(`https://65397c28e3b530c8d9e872ae.mockapi.io/cart/${itemToRemove}`) 
-   let  updatedItems = cartitems.filter(item => item.id !== itemToRemove);
+    console.log(itemToRemove)
+    axios.delete(`${API_URL}/drawer/${itemToRemove}`) 
+   let  updatedItems = cartitems.filter(item => item._id !== itemToRemove);
    setCartItems(updatedItems)
     console.log(cartitems)
     }
@@ -58,6 +64,7 @@ function App() {
 
   useEffect(() => {
     loadFromBack ()
+    console.log(items)
   }, []);
 
   return (
@@ -98,8 +105,8 @@ function App() {
   .filter((el) => el.title.toLowerCase().includes(searchValue))
   .map((el) => (
      
-      <Card key={el.id}
-      id={el.id}
+      <Card key={el._id}
+      id={el._id}
       title={el.title} 
       price={el.price} 
       imageUrl={el.imageUrl}
