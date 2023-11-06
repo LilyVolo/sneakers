@@ -2,24 +2,27 @@ import { useState } from 'react';
 import styles from './Card.module.scss';
 
 
-function Card({title, imageUrl, price, addtoTheCart, id, onFavorite}) {
+function Card({title, imageUrl, price, addtoTheCart, id, onFavorite, favorited}) {
+ 
+  const [isFavorite, setIsFavorite] = useState(favorited);
   const [isAdded, setIsAdded] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
 
 function putToTheCart(){
   addtoTheCart({title, imageUrl, price, id})
 setIsAdded(!isAdded)
 }
-function onFavorite () {
+function putToFav () {
+  onFavorite()
   setIsFavorite(!isFavorite)
 }
+
   return (
     <div className={styles.card}>
       <div className={styles.favorites}>
         <img className={styles.plus} 
         src={isFavorite ? "/img/liked.svg" : "/img/unliked.svg"} 
         alt="Unliked" 
-        onClick={onFavorite} />
+        onClick={putToFav} />
 
       </div>
         <img width={133} height={122} src={imageUrl} alt="sneakers" />
