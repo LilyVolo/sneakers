@@ -15,8 +15,8 @@ function HomePage() {
   const [cartOpened, setCartOpened] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [favItems, setFavItems] = useState([])
-  
-  // const [isAdded, setIsAdded] = useState(false);
+
+   const [isAdded, setIsAdded] = useState(false);
 
   function loadFromBack (){
     axios.get(`${API_URL}/items`).then((res) => {
@@ -26,40 +26,65 @@ function HomePage() {
     });
     axios.get(`${API_URL}/drawer`).then((res) => {
       setCartItems(res.data)
-      console.log(cartitems, 'check')
+      console.log(cartitems, 'check0')
     })
     
   }
 
-  function handleAddedtoCart(obj) {
-    axios.post(`${API_URL}/drawer/addToDrawer`, obj) 
-    setCartItems([...cartitems, obj])
-
-    }
-  
-    const handleAddedtoFav = async (obj) => {
-      console.log('What the fuck is going on ?', obj, 'arr', favItems, 'checkitbabe', obj._id,)
-      const isAlreadyFav = favItems.find(item=> {
-   
-        return item.item === obj._id
-      
-      });
-
-console.log('isAlreadyFav', isAlreadyFav)
-
-      if(isAlreadyFav) {
-        axios.delete(`${API_URL}/favourites/${isAlreadyFav}`) 
-        console.log('что блять происходит', obj, 'arr', favItems)
-        let  updatedItems = favItems.filter(item => item.item !== obj._id);
-          setFavItems(updatedItems)
+  const handleAddedtoCart = async (obj) => {
+    try {
+      if (cartitems.find((item) => item.item === obj._id)) {
+        // Если элемент уже есть в корзине, удаляем его
+        const deletedItem = cartitems.find((item) => item.item === obj._id);
+        const response = await axios.delete(`${API_URL}/drawer/${deletedItem._id}`);
+        if (response.status === 204) {
+          setCartItems((prev) => prev.filter((item) => item.item !== obj._id));
+          console.log("Item successfully deleted from cart");
+        } else {
+          console.error("Failed to delete item from cart");
+        }
+      } else {
+        // Если элемент отсутствует в корзине, добавляем его
+        const newItem = { ...obj, item: obj._id };
+        const response = await axios.post(`${API_URL}/drawer/addToDrawer`, newItem);
+        if (response.status === 200) {
+          setCartItems([...cartitems, newItem]);
+          console.log("Item successfully added to cart");
+        } else {
+          console.error("Failed to add item to cart");
+        }
       }
-      else {
-        const newItem = {...obj, item: obj._id};
-        const {data} = await axios.post(`${API_URL}/favourites/addToFav`, newItem)
-        console.log(favItems)
-        console.log('TADADADA', data)
-       setFavItems([...favItems, data])
-      }  
+    } catch (error) {
+      console.error("Error while handling the action", error);
+      alert("Не удалось обработать действие");
+    }
+  };
+  
+ 
+    const handleAddedtoFav = async (obj) => {
+      try {
+        if(favItems.find(item=> 
+          item.item === obj._id ))
+       { favItems.find((item)=> {
+         item.item === obj._id 
+        axios.delete(`${API_URL}/favourites/${item._id}`) 
+       })
+ 
+         let  updatedItems = favItems.filter(item => item.item !== obj._id);
+           setFavItems(updatedItems)
+       }
+       else {
+         const newItem = {...obj, item: obj._id};
+         const {data} = await axios.post(`${API_URL}/favourites/addToFav`, newItem)
+        setFavItems([...favItems, data])
+       }  
+      }
+
+      catch (error) {
+        alert  ('Не удалось добавить в фавориты')
+      }
+
+      
     }
 
   function onDeleteFronCart (itemToRemove) {
@@ -124,7 +149,7 @@ console.log('isAlreadyFav', isAlreadyFav)
       title={el.title} 
       price={el.price} 
       imageUrl={el.imageUrl}
-      addtoTheCart={(el)=>  handleAddedtoCart(el)}
+      addtoTheCart={()=>  handleAddedtoCart(el)}
       onFavorite = {() => handleAddedtoFav(el)}
 
       

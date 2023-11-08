@@ -16,6 +16,7 @@ function Favourites () {
   const [searchValue, setSearchValue] = useState('')
   const [favItems, setFavItems] = useState([])
   
+  
   // const [isAdded, setIsAdded] = useState(false);
 
   function loadFromBackFav (){
@@ -51,7 +52,16 @@ function Favourites () {
     console.log(cartitems)
     }
 
-
+    const handleAddedtoFav = async (obj) => {
+      
+     
+       axios.delete(`${API_URL}/favourites/${obj._id}`) 
+      
+        let  updatedItems = favItems.filter(item => item._id !== obj._id);
+          setFavItems(updatedItems)
+      }
+     
+    
 
   useEffect(() => {
     loadFromBackFav ()
@@ -80,7 +90,7 @@ function Favourites () {
       price={el.price} 
       imageUrl={el.imageUrl}
       addtoTheCart={(el)=>  handleAddedtoCart(el)}
-      // onFavorite = {() => handleAddedtoFav(el)}
+      onFavorite = {() => handleAddedtoFav(el)}
       favorited = {true}
       />
       

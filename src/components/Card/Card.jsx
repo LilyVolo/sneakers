@@ -2,13 +2,17 @@ import { useState } from 'react';
 import styles from './Card.module.scss';
 
 
-function Card({title, imageUrl, price, addtoTheCart, id, onFavorite, favorited}) {
+function Card({ title, imageUrl, price, addtoTheCart, id, onFavorite, favorited}) {
  
   const [isFavorite, setIsFavorite] = useState(favorited);
   const [isAdded, setIsAdded] = useState(false);
 
-function putToTheCart(){
-  addtoTheCart({title, imageUrl, price, id})
+
+ 
+ function putToTheCart(){
+  // addtoTheCart({title, imageUrl, price, id})
+addtoTheCart({title, imageUrl, price, id})
+ console.log(id, 'sssssssssssss')
 setIsAdded(!isAdded)
 }
 function putToFav () {

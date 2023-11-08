@@ -17,7 +17,7 @@ function Drawer({onCloseCart, items = [], onDeleteFromCart,  onDelete}) {
           <div className="d-flex flex-column flex">
             <div className="items flex">
               {items.map((obj) => (
-                <div key={obj.id} className="cartItem d-flex align-center mb-20">
+                <div key={obj._id} className="cartItem d-flex align-center mb-20">
                   <div
                     style={{ backgroundImage: `url(${obj.imageUrl})` }}
                     className="cartItemImg"></div>
@@ -27,7 +27,7 @@ function Drawer({onCloseCart, items = [], onDeleteFromCart,  onDelete}) {
                     <b>{obj.price} руб.</b>
                   </div>
                   <img
-                    onClick={() => onDelete(obj._id)}
+                    onClick={() => onDelete(obj.item)}
                     className="removeBtn"
                     src="img/btn-remove.svg"
                     alt="Remove"
