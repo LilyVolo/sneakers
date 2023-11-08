@@ -33,26 +33,21 @@ function HomePage() {
 
   const handleAddedtoCart = async (obj) => {
     try {
-      if (cartitems.find((item) => item.item === obj._id)) {
-        // Если элемент уже есть в корзине, удаляем его
-        const deletedItem = cartitems.find((item) => item.item === obj._id);
-        const response = await axios.delete(`${API_URL}/drawer/${deletedItem._id}`);
-        if (response.status === 204) {
-          setCartItems((prev) => prev.filter((item) => item.item !== obj._id));
+      const existingCartItem = cartitems.find((item) => item.item === obj._id);
+  
+      if (existingCartItem) {
+        // Если элемент уже есть в корзине, удаляем его по полю "item"
+        axios.delete(`${API_URL}/drawer`, { data: { item: obj._id } }).then(() => {
           console.log("Item successfully deleted from cart");
-        } else {
-          console.error("Failed to delete item from cart");
-        }
+          setCartItems((prev) => prev.filter((item) => item.item !== obj._id));
+        });
       } else {
         // Если элемент отсутствует в корзине, добавляем его
         const newItem = { ...obj, item: obj._id };
-        const response = await axios.post(`${API_URL}/drawer/addToDrawer`, newItem);
-        if (response.status === 200) {
-          setCartItems([...cartitems, newItem]);
+        axios.post(`${API_URL}/drawer/addToDrawer`, newItem).then(() => {
           console.log("Item successfully added to cart");
-        } else {
-          console.error("Failed to add item to cart");
-        }
+          setCartItems([...cartitems, newItem]);
+        });
       }
     } catch (error) {
       console.error("Error while handling the action", error);
@@ -87,12 +82,26 @@ function HomePage() {
       
     }
 
-  function onDeleteFronCart (itemToRemove) {
-    console.log(itemToRemove)
-    axios.delete(`${API_URL}/drawer/${itemToRemove}`) 
-   let  updatedItems = cartitems.filter(item => item._id !== itemToRemove);
-   setCartItems(updatedItems)
-    console.log(cartitems)
+  const onDeleteFronCart = async (obj) =>  {
+    try {
+      const existingCartItem = cartitems.find((item) => item.item === obj._id);
+  
+      if (existingCartItem) {
+        // Если элемент уже есть в корзине, удаляем его по полю "item"
+        axios.delete(`${API_URL}/drawer`, { data: { item: obj._id } }).then(() => {
+          console.log("Item successfully deleted from cart");
+          setCartItems((prev) => prev.filter((item) => item.item !== obj._id));
+        });
+      } else {
+     
+          console.log("Item is not there");
+     
+        }
+      }
+     catch (error) {
+      console.error("Error while handling the action", error);
+      alert("Не удалось обработать действие");
+    }
     }
 
 
