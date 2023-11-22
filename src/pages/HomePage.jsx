@@ -15,21 +15,48 @@ function HomePage() {
   const [cartOpened, setCartOpened] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [favItems, setFavItems] = useState([])
+  const [isLoading,  setLoading] = useState(true)
 
+
+  function renderItems () {
+    const filtredItems =items.filter((item) =>
+    item.title.toLowerCase().includes(searchValue.toLowerCase())
+    )
+
+    console.log( items);
+    return (
+      isLoading
+        ? [...Array(8)]
+        : filtredItems.map((el) => (
+            el ? (  // Добавьте проверку на существование элемента
+              <Card
+                key={el._id}
+                id={el._id}
+                title={el.title}
+                price={el.price}
+                imageUrl={el.imageUrl}
+                addtoTheCart={() => handleAddedtoCart(el)}
+                onFavorite={() => handleAddedtoFav(el)}
+                loading={isLoading}
+              />
+            ) : null
+          ))
+    );
+  }
    const [isAdded, setIsAdded] = useState(false);
 
-  function loadFromBack (){
-    axios.get(`${API_URL}/items`).then((res) => {
+  // function loadFromBack (){
+  //   axios.get(`${API_URL}/items`).then((res) => {
       
-      setItems(res.data)
+  //     setItems(res.data)
     
-    });
-    axios.get(`${API_URL}/drawer`).then((res) => {
-      setCartItems(res.data)
-      console.log(cartitems, 'check0')
-    })
+  //   });
+  //   axios.get(`${API_URL}/drawer`).then((res) => {
+  //     setCartItems(res.data)
+  //     console.log(cartitems, 'check0')
+  //   })
     
-  }
+  // }
 
   const handleAddedtoCart = async (obj) => {
     try {
@@ -111,8 +138,23 @@ function HomePage() {
 
 
   useEffect(() => {
-    loadFromBack ()
-    console.log(items)
+    const fetchData = async () => {
+      try {
+        const { data: itemsData } = await axios.get(`${API_URL}/items`);
+        const { data: drawerData } = await axios.get(`${API_URL}/drawer`);
+        const { data: favData } = await axios.get(`${API_URL}/favourites`);
+
+        setItems(itemsData);
+        setCartItems(drawerData);
+        setFavItems(favData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -149,24 +191,7 @@ function HomePage() {
       </div>
 
 <div className='d-flex flex-wrap'>
-  {items
-  .filter((el) => el.title.toLowerCase().includes(searchValue))
-  .map((el) => (
-     
-      <Card key={el._id}
-      id={el._id}
-      title={el.title} 
-      price={el.price} 
-      imageUrl={el.imageUrl}
-      addtoTheCart={()=>  handleAddedtoCart(el)}
-      onFavorite = {() => handleAddedtoFav(el)}
-
-      
-      />
-      
-    ))
-  }
-    
+{renderItems () }
 
 </div>
     </div>
