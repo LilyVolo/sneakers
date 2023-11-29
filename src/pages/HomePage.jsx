@@ -32,6 +32,7 @@ function HomePage() {
   }
 
   const handleAddedtoCart = async (obj) => {
+    console.log('object2', obj)
     try {
       // console.log( cartitems,  obj._id,  'first')
       const existingCartItem = cartitems.find((item) => item.item === obj._id);
@@ -84,14 +85,16 @@ function HomePage() {
     }
 
   const onDeleteFronCart = async (obj) =>  {
+    console.log('cartitem', cartitems)
+    console.log('object1', obj)
     try {
-      const existingCartItem = cartitems.find((item) => item.item === obj._id);
+      const existingCartItem = cartitems.find((item) => item.item === obj.item);
       console.log(existingCartItem, 'v del prov exist');
       if (existingCartItem) {
         // Если элемент уже есть в корзине, удаляем его по полю "item"
-        axios.delete(`${API_URL}/drawer`, { data: { item: obj._id } }).then(() => {
+        axios.delete(`${API_URL}/drawer`, { data: { item: obj.item } }).then(() => {
           console.log("Item successfully deleted from cart");
-          setCartItems((prev) => prev.filter((item) => item.item !== obj._id));
+          setCartItems((prev) => prev.filter((item) => item.item !== obj.item));
         });
       } else {
      
