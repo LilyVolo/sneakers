@@ -7,7 +7,7 @@ import Header from '../components/Header'
 import Drawer from '../components/Drawer/Drawer'
 const API_URL = 'http://localhost:5005/api'
 
-
+// S
 
 function HomePage() {
   const [items, setItems] = useState([])
@@ -15,54 +15,28 @@ function HomePage() {
   const [cartOpened, setCartOpened] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [favItems, setFavItems] = useState([])
-  const [isLoading,  setLoading] = useState(true)
 
-
-  function renderItems () {
-    const filtredItems =items.filter((item) =>
-    item.title.toLowerCase().includes(searchValue.toLowerCase())
-    )
-
-    console.log( items);
-    return (
-      isLoading
-        ? [...Array(8)]
-        : filtredItems.map((el) => (
-            el ? (  // Добавьте проверку на существование элемента
-              <Card
-                key={el._id}
-                id={el._id}
-                title={el.title}
-                price={el.price}
-                imageUrl={el.imageUrl}
-                addtoTheCart={() => handleAddedtoCart(el)}
-                onFavorite={() => handleAddedtoFav(el)}
-                loading={isLoading}
-              />
-            ) : null
-          ))
-    );
-  }
    const [isAdded, setIsAdded] = useState(false);
 
-  // function loadFromBack (){
-  //   axios.get(`${API_URL}/items`).then((res) => {
+  function loadFromBack (){
+    axios.get(`${API_URL}/items`).then((res) => {
       
-  //     setItems(res.data)
+      setItems(res.data)
     
-  //   });
-  //   axios.get(`${API_URL}/drawer`).then((res) => {
-  //     setCartItems(res.data)
-  //     console.log(cartitems, 'check0')
-  //   })
+    });
+    axios.get(`${API_URL}/drawer`).then((res) => {
+      setCartItems(res.data)
     
-  // }
+    })
+    // So what is going on ?) Ok i will be back
+  }
 
   const handleAddedtoCart = async (obj) => {
     try {
+      // console.log( cartitems,  obj._id,  'first')
       const existingCartItem = cartitems.find((item) => item.item === obj._id);
-  
       if (existingCartItem) {
+        console.log( cartitems, 'check del')
         // Если элемент уже есть в корзине, удаляем его по полю "item"
         axios.delete(`${API_URL}/drawer`, { data: { item: obj._id } }).then(() => {
           console.log("Item successfully deleted from cart");
@@ -112,7 +86,7 @@ function HomePage() {
   const onDeleteFronCart = async (obj) =>  {
     try {
       const existingCartItem = cartitems.find((item) => item.item === obj._id);
-  
+      console.log(existingCartItem, 'v del prov exist');
       if (existingCartItem) {
         // Если элемент уже есть в корзине, удаляем его по полю "item"
         axios.delete(`${API_URL}/drawer`, { data: { item: obj._id } }).then(() => {
@@ -137,24 +111,21 @@ function HomePage() {
   }
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data: itemsData } = await axios.get(`${API_URL}/items`);
-        const { data: drawerData } = await axios.get(`${API_URL}/drawer`);
-        const { data: favData } = await axios.get(`${API_URL}/favourites`);
-
-        setItems(itemsData);
-        setCartItems(drawerData);
-        setFavItems(favData);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-
-      }
-    };
-
+  useEffect(() =>  {
+    async function fetchData() {
+      
+      const {data} = await axios.get(`${API_URL}/items`);
+      const datDrawer = await axios.get(`${API_URL}/drawer`).then(res => {return res.data});
+  
+      const datFav = await axios.get(`${API_URL}/favourites`).then(res => {return res.data});
+      
+      setItems(data);
+      setCartItems(datDrawer);
+      setFavItems(datFav);
+    }
     fetchData();
+    // loadFromBack ()
+
   }, []);
 
   return (
@@ -191,7 +162,24 @@ function HomePage() {
       </div>
 
 <div className='d-flex flex-wrap'>
-{renderItems () }
+  {items
+  .filter((el) => el.title.toLowerCase().includes(searchValue))
+  .map((el) => (
+     
+      <Card key={el._id}
+      id={el._id}
+      title={el.title} 
+      price={el.price} 
+      imageUrl={el.imageUrl}
+      addtoTheCart={()=>  handleAddedtoCart(el)}
+      onFavorite = {() => handleAddedtoFav(el)}
+      loading={false}
+      
+      />
+      
+    ))
+  }
+    
 
 </div>
     </div>

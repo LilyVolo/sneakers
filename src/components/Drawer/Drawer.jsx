@@ -25,6 +25,7 @@ function Drawer({onCloseCart, items = [], onDeleteFromCart,  onDelete}) {
                     <p className="mb-5">{obj.title}</p>
                     <b>{obj.price} руб.</b>
                   </div>
+                  {/* {console.log(obj)} */}
                   <img
                     onClick={() => onDelete(obj)}
                     className="removeBtn"
