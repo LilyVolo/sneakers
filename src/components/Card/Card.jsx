@@ -3,10 +3,10 @@ import styles from './Card.module.scss';
 import ContentLoader from 'react-content-loader';
 
 function Card({ title, imageUrl, price, addtoTheCart, id, 
-  onFavorite, favorited, loading}) {
+  onFavorite, favorited=false, added=false, loading}) {
  
-  const [isFavorite, setIsFavorite] = useState(favorited);
-  const [isAdded, setIsAdded] = useState(false);
+  // const [isFavorite, setIsFavorite] = useState(favorited);
+  // const [isAdded, setIsAdded] = useState(added);
 
 
  
@@ -14,12 +14,12 @@ function Card({ title, imageUrl, price, addtoTheCart, id,
   // addtoTheCart({title, imageUrl, price, id})
 addtoTheCart({title, imageUrl, price, id})
  console.log(id, 'sssssssssssss')
-setIsAdded(!isAdded)
+// setIsAdded(!added)
 }
 function putToFav () {
   onFavorite()
-  setIsFavorite(!isFavorite)
-}
+//   setIsFavorite(!isFavorite)
+ }
 
   return (
     <div className={styles.card}>
@@ -41,7 +41,7 @@ function putToFav () {
       <>
       <div className={styles.favorites}>
         <img className={styles.plus} 
-        src={isFavorite ? "/img/liked.svg" : "/img/unliked.svg"} 
+        src={favorited ? "/img/liked.svg" : "/img/unliked.svg"} 
         alt="Unliked" 
         onClick={putToFav} />
 
@@ -54,7 +54,7 @@ function putToFav () {
           <b>{price}</b>  
           </div>
           <img className={styles.plus} onClick={putToTheCart} 
-            src={isAdded ? "/img/btn-checked.svg": "/img/btn-plus.svg"} alt="plus" />
+            src={added ? "/img/btn-checked.svg": "/img/btn-plus.svg"} alt="plus" />
         </div>
         </>
          )}

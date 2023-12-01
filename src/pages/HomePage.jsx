@@ -16,20 +16,8 @@ function HomePage() {
   const [searchValue, setSearchValue] = useState('')
   const [favItems, setFavItems] = useState([])
 
-   const [isAdded, setIsAdded] = useState(false);
-
-  function loadFromBack (){
-    axios.get(`${API_URL}/items`).then((res) => {
-      
-      setItems(res.data)
-    
-    });
-    axios.get(`${API_URL}/drawer`).then((res) => {
-      setCartItems(res.data)
-    
-    })
-    // So what is going on ?) Ok i will be back
-  }
+  const [added, setAdded] = useState(false);
+  const [favorited, setIsFavorite] = useState(false);
 
   const handleAddedtoCart = async (obj) => {
     console.log('object2', obj)
@@ -122,9 +110,10 @@ function HomePage() {
   
       const datFav = await axios.get(`${API_URL}/favourites`).then(res => {return res.data});
       
-      setItems(data);
       setCartItems(datDrawer);
       setFavItems(datFav);
+      setItems(data);
+
     }
     fetchData();
     // loadFromBack ()
@@ -168,20 +157,21 @@ function HomePage() {
   {items
   .filter((el) => el.title.toLowerCase().includes(searchValue))
   .map((el) => (
-     
-      <Card key={el._id}
-      id={el._id}
+    <Card key={el._id}
+    id={el._id}
       title={el.title} 
       price={el.price} 
       imageUrl={el.imageUrl}
       addtoTheCart={()=>  handleAddedtoCart(el)}
       onFavorite = {() => handleAddedtoFav(el)}
       loading={false}
-      
+      added = {cartitems.some((obj) =>obj.item === el._id)}
+      favorited = {favItems.some((obj) =>obj.item === el._id)}
       />
       
-    ))
-  }
+      ))
+    }
+    {console.log(items, favItems)}
     
 
 </div>
