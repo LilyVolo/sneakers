@@ -11,16 +11,16 @@ import { useContext } from 'react'
 
 function HomePage() {
   const [items, setItems] = useState([])
-  const [cartitems, setCartItems] = useState([])
-  //const [cartOpened, setCartOpened] = useState(false)
+  //const [cartitems, setCartItems] = useState([])
   const [searchValue, setSearchValue] = useState('')
   const [favItems, setFavItems] = useState([])
-
   const [added, setAdded] = useState(false);
   const [favorited, setIsFavorite] = useState(false);
-
   const [isLoading,  setLoading] = useState(true)
-const { cartOpened, setCartOpened } = useContext(AppContext);
+  const { cartOpened, setCartOpened } = useContext(AppContext);
+  const {cartitems, setCartItems} = useContext(AppContext);
+ 
+
 
   function renderItems () {
     const filtredItems =items.filter((item) =>

@@ -1,7 +1,32 @@
+import { useState } from "react";
 import Info from "../Info"; 
 import styles from './Drawer.module.scss';
+import { useContext } from "react";
+import { AppContext } from "../AppProvider"
+import axios from 'axios';
+const API_URL = 'http://localhost:5005/api'
+
 function Drawer({onCloseCart, items = [], onDeleteFromCart,  onDelete}) {
 
+const {cartitems, setCartItems} = useContext(AppContext);
+const [orderIsCompleted, setOrder] = useState(false);
+
+const [orderId, setOrderid] = useState(null);
+
+const onClickOrder = async () => {
+  try {
+    const {data} = await axios.post(`${API_URL}/orders/addTheOrder`, {items: cartitems})
+    setOrder(true)
+    console.log(cartitems, 'check1')
+    console.log(data._id, 'check2')
+    setOrderid(data._id)
+
+    setCartItems([])
+  }
+  catch (error) {
+    alert ('Нихрена не работает, идиот! заказ не проходит')
+  }
+}
 
 
     return (
@@ -49,7 +74,8 @@ function Drawer({onCloseCart, items = [], onDeleteFromCart,  onDelete}) {
                 </li>
               </ul>
               <button 
-            //   disabled={isLoading} onClick={onClickOrder}
+            //   disabled={isLoading}
+             onClick={onClickOrder}
                className="greenButton">
                 Оформить заказ <img src="img/arrow.svg" alt="Arrow" />
               </button>
@@ -59,18 +85,27 @@ function Drawer({onCloseCart, items = [], onDeleteFromCart,  onDelete}) {
             <>
           <p>Корзина пуста</p>
            
-            <Info title='Корзина пуста' description='Добавить товар' image='img/empty-cart.jpg'/>
-            
+          <Info
+           title={orderIsCompleted ? 'Заказ оформлен!' : 'Корзина пустая'}
+         description={
+          orderIsCompleted
+             ? `Ваш заказ  скоро будет передан курьерской доставке`
+               : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
+           }
+         image={orderIsCompleted ? 'img/complete-order.jpg' : 'img/empty-cart.jpg'}
+          />
+        
              </>
+          /* <Info title='Корзина пуста' description='Добавить товар' image='img/empty-cart.jpg'/> */
          
         //   <Info
-        //     title={isOrderComplete ? 'Заказ оформлен!' : 'Корзина пустая'}
+        //     title={orderIsCompleted ? 'Заказ оформлен!' : 'Корзина пустая'}
         //     description={
-        //       isOrderComplete
+        //       orderIsCompleted
         //         ? `Ваш заказ #${orderId} скоро будет передан курьерской доставке`
         //         : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
         //     }
-        //     image={isOrderComplete ? 'img/complete-order.jpg' : 'img/empty-cart.jpg'}
+        //     image=orderIsCompleted ? 'img/complete-order.jpg' : 'img/empty-cart.jpg'}
         //   />
         
         }

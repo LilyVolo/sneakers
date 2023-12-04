@@ -6,7 +6,7 @@ function Card({ title, imageUrl, price, addtoTheCart, id,
   onFavorite, favorited=false, added=false, loading}) {
  
 
-    console.log(loading, 'Antoine')
+    
  
  function putToTheCart(){
 
