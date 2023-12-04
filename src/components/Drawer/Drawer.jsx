@@ -18,7 +18,8 @@ const onClickOrder = async () => {
     const {data} = await axios.post(`${API_URL}/orders/addTheOrder`, {items: cartitems})
     setOrder(true)
     console.log(cartitems, 'check1')
-    console.log(data._id, 'check2')
+    await axios.put(`${API_URL}/drawer/clearDrawer`)
+    console.log('Drawer cleared successfully:');
     setOrderid(data._id)
 
     setCartItems([])
