@@ -1,5 +1,5 @@
-import styles from './Drawer.module.scss'
-
+import Info from "../Info"; 
+import styles from './Drawer.module.scss';
 function Drawer({onCloseCart, items = [], onDeleteFromCart,  onDelete}) {
 
 
@@ -57,10 +57,11 @@ function Drawer({onCloseCart, items = [], onDeleteFromCart,  onDelete}) {
           </div>
         ) : 
             <>
-            <p>Корзина пуста</p>
-            <img src="img/empty-cart.jpg" alt="" />
+          <p>Корзина пуста</p>
+           
+            <Info title='Корзина пуста' description='Добавить товар' image='img/empty-cart.jpg'/>
+            
              </>
-
          
         //   <Info
         //     title={isOrderComplete ? 'Заказ оформлен!' : 'Корзина пустая'}

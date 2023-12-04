@@ -6,18 +6,47 @@ import Card from '../components/Card/Card'
 import Header from '../components/Header'
 import Drawer from '../components/Drawer/Drawer'
 const API_URL = 'http://localhost:5005/api'
-
-// S
+import { AppContext } from "../components/AppProvider"
+import { useContext } from 'react'
 
 function HomePage() {
   const [items, setItems] = useState([])
   const [cartitems, setCartItems] = useState([])
-  const [cartOpened, setCartOpened] = useState(false)
+  //const [cartOpened, setCartOpened] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [favItems, setFavItems] = useState([])
 
   const [added, setAdded] = useState(false);
   const [favorited, setIsFavorite] = useState(false);
+
+  const [isLoading,  setLoading] = useState(true)
+const { cartOpened, setCartOpened } = useContext(AppContext);
+
+  function renderItems () {
+    const filtredItems =items.filter((item) =>
+    item.title.toLowerCase().includes(searchValue.toLowerCase())
+    )
+
+    console.log( items);
+    return ( isLoading  ? [...Array(8)]
+        : filtredItems).map((el) => (
+          (  
+            <Card key={el?._id}
+            id={el?._id}
+              title={el?.title} 
+              price={el?.price} 
+              imageUrl={el?.imageUrl}
+              addtoTheCart={()=>  handleAddedtoCart(el)}
+              onFavorite = {() => handleAddedtoFav(el)}
+              loading={isLoading}
+              added = {cartitems.some((obj) =>obj.item === el?._id)}
+              favorited = {favItems.some((obj) =>obj.item === el?._id)}
+              />
+            )
+          )
+    );
+  }
+
 
   const handleAddedtoCart = async (obj) => {
     console.log('object2', obj)
@@ -101,23 +130,27 @@ function HomePage() {
     setSearchValue(e.target.value)
   }
 
-
+ 
   useEffect(() =>  {
     async function fetchData() {
-      
+    try {
       const {data} = await axios.get(`${API_URL}/items`);
       const datDrawer = await axios.get(`${API_URL}/drawer`).then(res => {return res.data});
   
       const datFav = await axios.get(`${API_URL}/favourites`).then(res => {return res.data});
       
+       setLoading(false)
       setCartItems(datDrawer);
       setFavItems(datFav);
       setItems(data);
 
     }
-    fetchData();
-    // loadFromBack ()
-
+  catch (error) {
+    alert('Ошибка при запросе данных ;(');
+    console.error(error);
+  }
+}
+fetchData();
   }, []);
 
   return (
@@ -154,7 +187,7 @@ function HomePage() {
       </div>
 
 <div className='d-flex flex-wrap'>
-  {items
+  {/* {items
   .filter((el) => el.title.toLowerCase().includes(searchValue))
   .map((el) => (
     <Card key={el._id}
@@ -170,9 +203,9 @@ function HomePage() {
       />
       
       ))
-    }
-    {console.log(items, favItems)}
-    
+    } */}
+
+{renderItems () }
 
 </div>
     </div>

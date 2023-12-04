@@ -5,20 +5,17 @@ import ContentLoader from 'react-content-loader';
 function Card({ title, imageUrl, price, addtoTheCart, id, 
   onFavorite, favorited=false, added=false, loading}) {
  
-  // const [isFavorite, setIsFavorite] = useState(favorited);
-  // const [isAdded, setIsAdded] = useState(added);
 
-
+    console.log(loading, 'Antoine')
  
  function putToTheCart(){
-  // addtoTheCart({title, imageUrl, price, id})
+
 addtoTheCart({title, imageUrl, price, id})
- console.log(id, 'sssssssssssss')
-// setIsAdded(!added)
+
 }
 function putToFav () {
   onFavorite()
-//   setIsFavorite(!isFavorite)
+  
  }
 
   return (
