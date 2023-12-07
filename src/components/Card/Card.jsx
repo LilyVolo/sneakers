@@ -3,7 +3,8 @@ import styles from './Card.module.scss';
 import ContentLoader from 'react-content-loader';
 
 function Card({ title, imageUrl, price, addtoTheCart, id, 
-  onFavorite, favorited=false, added=false, loading}) {
+  onFavorite, favorited=false, added=false, loading,
+  hideButtons = false}) {
  
 
     
@@ -37,10 +38,10 @@ function putToFav () {
       ) : (
       <>
       <div className={styles.favorites}>
-        <img className={styles.plus} 
+        { !hideButtons &&<img className={styles.plus} 
         src={favorited ? "/img/liked.svg" : "/img/unliked.svg"} 
         alt="Unliked" 
-        onClick={putToFav} />
+        onClick={putToFav} />}
 
       </div>
         <img width={133} height={122} src={imageUrl} alt="sneakers" />
@@ -50,8 +51,9 @@ function putToFav () {
           <span>Цена:</span>
           <b>{price}</b>  
           </div>
-          <img className={styles.plus} onClick={putToTheCart} 
-            src={added ? "/img/btn-checked.svg": "/img/btn-plus.svg"} alt="plus" />
+      {!hideButtons &&<img className={styles.plus} onClick={putToTheCart} 
+        src={added ? "/img/btn-checked.svg": "/img/btn-plus.svg"} 
+        alt="plus" />}
         </div>
         </>
          )}

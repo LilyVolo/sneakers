@@ -11,7 +11,6 @@ import { useContext } from 'react'
 
 function HomePage() {
   const [items, setItems] = useState([])
-  //const [cartitems, setCartItems] = useState([])
   const [searchValue, setSearchValue] = useState('')
   const [favItems, setFavItems] = useState([])
   const [added, setAdded] = useState(false);

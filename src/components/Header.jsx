@@ -3,7 +3,7 @@ import { Routes, Route, Link} from "react-router-dom";
 import { AppContext } from "../components/AppProvider"
 import { useContext } from 'react'
 
-function Header({onClickCart}) {
+function Header({onClickCart, hideButtons=false}) {
 
   const {cartitems, setCartItems} = useContext(AppContext);
   

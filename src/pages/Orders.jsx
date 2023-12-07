@@ -1,20 +1,23 @@
 import React from 'react';
 import axios from 'axios';
-import { useState } from "react";
-
-import Card from '../components/Card';
-import AppContext from '../context';
+import Card from '../components/Card/Card';
+import Header from '../components/Header';
+import { useState, useEffect } from 'react';
+const API_URL = 'http://localhost:5005/api';
 
 function Orders() {
-  const { onAddToFavorite, onAddToCart } = React.useContext(AppContext);
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  React.useEffect(() => {
+
+
+  useEffect(() => {
     (async () => {
       try {
-        const { data } = await axios.get('https://60d62397943aa60017768e77.mockapi.io/orders');
-        setOrders(data.reduce((prev, obj) => [...prev, ...obj.items], []));
+        const { data } = await axios.get(`${API_URL}/orders`);
+        setOrders(data.map((obj) => obj.items));
+     
+        
         setIsLoading(false);
       } catch (error) {
         alert('Ошибка при запросе заказов');
@@ -23,16 +26,36 @@ function Orders() {
     })();
   }, []);
 
-  return (
-    <div className="content p-40">
-      <div className="d-flex align-center justify-between mb-40">
-        <h1>Мои заказы</h1>
-      </div>
 
-      <div className="d-flex flex-wrap">
-        {(isLoading ? [...Array(8)] : orders).map((item, index) => (
-          <Card key={index} loading={isLoading} {...item} />
-        ))}
+  return (
+    <div className="wrapper clear">
+      <Header />
+      <div className="content p-40">
+        <div className="d-flex align-center justify-between mb-40">
+          <h1>Мои заказы</h1>
+        </div>
+
+        <div className="d-flex flex-wrap">
+          {isLoading
+            ? [...Array(8)]
+            : orders.map((order, orderIndex) => (
+                <div key={orderIndex} className="order-container">
+                  <h2>Заказ №{orderIndex + 1}</h2>
+                  {orders ? (
+                    order.map((item, itemIndex) => (
+                      <Card
+                        key={itemIndex}
+                        loading={isLoading}
+                        hideButtons={true}
+                        {...item}
+                      />
+                    ))
+                  ) : (
+                    <p>Нет товаров в этом заказе</p>
+                  )}
+                </div>
+              ))}
+        </div>
       </div>
     </div>
   );
