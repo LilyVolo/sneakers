@@ -1,7 +1,15 @@
 
 import { Routes, Route, Link} from "react-router-dom";
+import { AppContext } from "../components/AppProvider"
+import { useContext } from 'react'
 
 function Header({onClickCart}) {
+
+  const {cartitems, setCartItems} = useContext(AppContext);
+  
+  const total = cartitems.reduce((sum, obj) => obj.price + sum, 0)
+
+console.log(total)
 
   return (
     <header className='d-flex justify-between align-center p-40 '>
@@ -19,7 +27,7 @@ function Header({onClickCart}) {
       <li  className='mr-30'>
         <img 
         width={18} height={18} src="/img/user.svg" alt="" />
-        <span>120 euro</span>
+        <span>{total}  </span>
       </li>
       <li>
         <img 

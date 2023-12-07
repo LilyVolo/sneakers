@@ -6,12 +6,16 @@ import { AppContext } from "../AppProvider"
 import axios from 'axios';
 const API_URL = 'http://localhost:5005/api'
 
+
 function Drawer({onCloseCart, items = [], onDeleteFromCart,  onDelete}) {
 
 const {cartitems, setCartItems} = useContext(AppContext);
 const [orderIsCompleted, setOrder] = useState(false);
 
 const [orderId, setOrderid] = useState(null);
+
+  
+const total = cartitems.reduce((sum, obj) => obj.price + sum, 0)
 
 const onClickOrder = async () => {
   try {
@@ -64,7 +68,7 @@ const onClickOrder = async () => {
             <div className="cartTotalBlock">
               <ul>
                 <li>
-                  <span>Итого:</span>
+                  <span>Итого: {total}</span>
                   <div></div>
                   {/* <b>{totalPrice} руб. </b> */}
                 </li>
