@@ -6,14 +6,16 @@ import Card from '../components/Card/Card'
 import Header from '../components/Header'
 import Drawer from '../components/Drawer/Drawer'
 const API_URL = 'http://localhost:5005/api'
-
+import Footer from '../components/footer'
+import { AppContext } from "../components/AppProvider"
+import { useContext } from 'react'
 
 
 function Favourites () {
   const [items, setItems] = useState([])
-  const [cartitems, setCartItems] = useState([])
-  const [cartOpened, setCartOpened] = useState(false)
-  const [searchValue, setSearchValue] = useState('')
+  const {cartitems, setCartItems} = useContext(AppContext);
+  const { cartOpened, setCartOpened } = useContext(AppContext);
+
   const [favItems, setFavItems] = useState([])
   
   function loadFromBackFav (){
@@ -36,13 +38,29 @@ function Favourites () {
     }
 
 
-  function onDeleteFronCart (itemToRemove) {
-    console.log(itemToRemove)
-    axios.delete(`${API_URL}/drawer/${itemToRemove}`) 
-   let  updatedItems = cartitems.filter(item => item._id !== itemToRemove);
-   setCartItems(updatedItems)
-    console.log(cartitems)
-    }
+    const onDeleteFronCart = async (obj) =>  {
+      console.log('cartitem', cartitems)
+      console.log('object1', obj)
+      try {
+        const existingCartItem = cartitems.find((item) => item.item === obj.item);
+        console.log(existingCartItem, 'v del prov exist');
+        if (existingCartItem) {
+          // Если элемент уже есть в корзине, удаляем его по полю "item"
+          axios.delete(`${API_URL}/drawer`, { data: { item: obj.item } }).then(() => {
+            console.log("Item successfully deleted from cart");
+            setCartItems((prev) => prev.filter((item) => item.item !== obj.item));
+          });
+        } else {
+       
+            console.log("Item is not there");
+       
+          }
+        }
+       catch (error) {
+        console.error("Error while handling the action", error);
+        alert("Не удалось обработать действие");
+      }
+      }
 
     const handleAddedtoFav = async (obj) => {
       
@@ -90,6 +108,7 @@ function Favourites () {
     
 
 </div>
+<Footer/>
     </div>
     
     </>

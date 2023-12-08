@@ -16,6 +16,31 @@ function Orders() {
   const { cartOpened, setCartOpened } = useContext(AppContext);
   const {cartitems, setCartItems} = useContext(AppContext);
 
+
+  const onDeleteFronCart = async (obj) =>  {
+    console.log('cartitem', cartitems)
+    console.log('object1', obj)
+    try {
+      const existingCartItem = cartitems.find((item) => item.item === obj.item);
+      console.log(existingCartItem, 'v del prov exist');
+      if (existingCartItem) {
+        // Если элемент уже есть в корзине, удаляем его по полю "item"
+        axios.delete(`${API_URL}/drawer`, { data: { item: obj.item } }).then(() => {
+          console.log("Item successfully deleted from cart");
+          setCartItems((prev) => prev.filter((item) => item.item !== obj.item));
+        });
+      } else {
+     
+          console.log("Item is not there");
+     
+        }
+      }
+     catch (error) {
+      console.error("Error while handling the action", error);
+      alert("Не удалось обработать действие");
+    }
+    }
+
   useEffect(() => {
     (async () => {
       try {
@@ -36,6 +61,7 @@ function Orders() {
     <div className="wrapper clear">
       <Header onClickCart={()=> setCartOpened(true)}/>
       <Drawer 
+       onDelete={onDeleteFronCart}
    items={cartitems} 
    onCloseCart={()=>setCartOpened(false)}/> 
       <div className="content p-40">
