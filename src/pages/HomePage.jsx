@@ -5,6 +5,7 @@ import axios from 'axios'
 import Card from '../components/Card/Card'
 import Header from '../components/Header'
 import Drawer from '../components/Drawer/Drawer'
+import Footer from '../components/footer'
 const API_URL = 'http://localhost:5005/api'
 import { AppContext } from "../components/AppProvider"
 import { useContext } from 'react'
@@ -26,7 +27,7 @@ function HomePage() {
     item.title.toLowerCase().includes(searchValue.toLowerCase())
     )
 
-    console.log( items);
+   
     return ( isLoading  ? [...Array(8)]
         : filtredItems).map((el) => (
           (  
@@ -50,21 +51,21 @@ function HomePage() {
   const handleAddedtoCart = async (obj) => {
     console.log('object2', obj)
     try {
-      // console.log( cartitems,  obj._id,  'first')
+   
       const existingCartItem = cartitems.find((item) => item.item === obj._id);
       if (existingCartItem) {
-        console.log( cartitems, 'check del')
-        // Если элемент уже есть в корзине, удаляем его по полю "item"
+      
+
+        setCartItems((prev) => prev.filter((item) => item.item !== obj._id));
         axios.delete(`${API_URL}/drawer`, { data: { item: obj._id } }).then(() => {
-          console.log("Item successfully deleted from cart");
-          setCartItems((prev) => prev.filter((item) => item.item !== obj._id));
+       
         });
       } else {
-        // Если элемент отсутствует в корзине, добавляем его
+      
         const newItem = { ...obj, item: obj._id };
+        setCartItems([...cartitems, newItem]);
         axios.post(`${API_URL}/drawer/addToDrawer`, newItem).then(() => {
-          console.log("Item successfully added to cart");
-          setCartItems([...cartitems, newItem]);
+        
         });
       }
     } catch (error) {
@@ -156,16 +157,16 @@ fetchData();
     <>
     <div className="wrapper clear">
    <Header onClickCart={()=> setCartOpened(true)}/>
-   {cartOpened ? <Drawer 
+   <Drawer 
    items={cartitems} 
-  //  onDeleteFromCart={(itemToRemove)=> handleRemove(itemToRemove)}
+
    onDelete={onDeleteFronCart}
-   onCloseCart={()=>setCartOpened(false)}/> : null}
+   onCloseCart={()=>setCartOpened(false)}/> 
 
     <div className="content p-40 ">
       <div className='mb-40 d-flex align-center justify-between'>
 
-      <h1>{searchValue ? `Поиск по запросу: ${searchValue}` : 'Все кросовки'}
+      <h1>{searchValue ? `Поиск по запросу: ${searchValue}` : 'Our sneaker assortment:'}
       </h1> 
       </div>
       <div className="search-block">
@@ -186,28 +187,13 @@ fetchData();
       </div>
 
 <div className='d-flex flex-wrap'>
-  {/* {items
-  .filter((el) => el.title.toLowerCase().includes(searchValue))
-  .map((el) => (
-    <Card key={el._id}
-    id={el._id}
-      title={el.title} 
-      price={el.price} 
-      imageUrl={el.imageUrl}
-      addtoTheCart={()=>  handleAddedtoCart(el)}
-      onFavorite = {() => handleAddedtoFav(el)}
-      loading={false}
-      added = {cartitems.some((obj) =>obj.item === el._id)}
-      favorited = {favItems.some((obj) =>obj.item === el._id)}
-      />
-      
-      ))
-    } */}
+
 
 {renderItems () }
 
 </div>
     </div>
+<Footer/>
     </div>
     </>
   )

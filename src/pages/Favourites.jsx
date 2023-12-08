@@ -16,9 +16,6 @@ function Favourites () {
   const [searchValue, setSearchValue] = useState('')
   const [favItems, setFavItems] = useState([])
   
-  
-  // const [isAdded, setIsAdded] = useState(false);
-
   function loadFromBackFav (){
     axios.get(`${API_URL}/favourites`).then((res) => {
       
@@ -37,12 +34,7 @@ function Favourites () {
     setCartItems([...cartitems, obj])
 
     }
-  
-    // function handleAddedtoFav(obj){
-    //   axios.post(`${API_URL}/favourites/addToFav`, obj)
-    //   setFavItems([...favItems, obj])
-    //   console.log('aded', favItems)
-    // }
+
 
   function onDeleteFronCart (itemToRemove) {
     console.log(itemToRemove)
@@ -74,7 +66,6 @@ function Favourites () {
    <Header onClickCart={()=> setCartOpened(true)}/>
    {cartOpened ? <Drawer 
    items={cartitems} 
-  //  onDeleteFromCart={(itemToRemove)=> handleRemove(itemToRemove)}
    onDelete={onDeleteFronCart}
    onCloseCart={()=>setCartOpened(false)}/> : null}
 

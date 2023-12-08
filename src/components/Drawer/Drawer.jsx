@@ -1,11 +1,11 @@
-import { useState } from "react";
 import Info from "../Info"; 
-import styles from './Drawer.module.scss';
+import { useState } from "react";
 import { useContext } from "react";
 import { AppContext } from "../AppProvider"
 import axios from 'axios';
-const API_URL = 'http://localhost:5005/api'
 
+const API_URL = 'http://localhost:5005/api'
+import styles from './Drawer.module.scss';
 
 function Drawer({onCloseCart, items = [], onDeleteFromCart,  onDelete}) {
 
@@ -13,7 +13,7 @@ const {cartitems, setCartItems} = useContext(AppContext);
 const [orderIsCompleted, setOrder] = useState(false);
 
 const [orderId, setOrderid] = useState(null);
-
+const { cartOpened, setCartOpened } = useContext(AppContext);
   
 const total = cartitems.reduce((sum, obj) => obj.price + sum, 0)
 
@@ -29,16 +29,16 @@ const onClickOrder = async () => {
     setCartItems([])
   }
   catch (error) {
-    alert ('Нихрена не работает, идиот! заказ не проходит')
+    alert ('error with order')
   }
 }
 
 
     return (
-        <div  className={styles.overlay}>
+        <div  className={`${styles.overlay} ${cartOpened ? styles.overlayVisible: ''}`}>
             <div className={styles.drawer}>
                 <h2 className="d-flex justify-between mb-30">
-                    Корзина <img onClick={onCloseCart} className="cu-p" src="/img/btn-remove.svg" alt="Remove" />
+                    Basket <img onClick={onCloseCart} className="cu-p" src="/img/btn-remove.svg" alt="Remove" />
                 </h2>
 
                 <div className="items">
@@ -53,9 +53,8 @@ const onClickOrder = async () => {
                     className="cartItemImg"></div>
                   <div className="mr-20 flex">
                     <p className="mb-5">{obj.title}</p>
-                    <b>{obj.price} руб.</b>
+                    <b>{obj.price} euros.</b>
                   </div>
-                  {/* {console.log(obj)} */}
                   <img
                     onClick={() => onDelete(obj)}
                     className="removeBtn"
@@ -68,51 +67,36 @@ const onClickOrder = async () => {
             <div className="cartTotalBlock">
               <ul>
                 <li>
-                  <span>Итого: {total}</span>
+                  <span> Total: {total} euros </span>
                   <div></div>
-                  {/* <b>{totalPrice} руб. </b> */}
+           
                 </li>
-                <li>
-                  <span>Налог 5%:</span>
-                  <div></div>
-                  {/* <b>{(totalPrice / 100) * 5} руб. </b> */}
-                </li>
+               
               </ul>
               <button 
-            //   disabled={isLoading}
+    
              onClick={onClickOrder}
                className="greenButton">
-                Оформить заказ <img src="img/arrow.svg" alt="Arrow" />
+                Place an order <img src="img/arrow.svg" alt="Arrow" />
               </button>
             </div>
           </div>
         ) : 
             <>
-          <p>Корзина пуста</p>
+          <p>Cart is empty</p>
            
           <Info
-           title={orderIsCompleted ? 'Заказ оформлен!' : 'Корзина пустая'}
+           title={orderIsCompleted ? 'Order placed!' : 'Cart is empty'}
          description={
           orderIsCompleted
-             ? `Ваш заказ  скоро будет передан курьерской доставке`
-               : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
+          ? `Your order will be delivered soon by our courier service.`
+          : 'Add at least one pair of sneakers to place an order.'
            }
          image={orderIsCompleted ? 'img/complete-order.jpg' : 'img/empty-cart.jpg'}
           />
         
              </>
-          /* <Info title='Корзина пуста' description='Добавить товар' image='img/empty-cart.jpg'/> */
-         
-        //   <Info
-        //     title={orderIsCompleted ? 'Заказ оформлен!' : 'Корзина пустая'}
-        //     description={
-        //       orderIsCompleted
-        //         ? `Ваш заказ #${orderId} скоро будет передан курьерской доставке`
-        //         : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
-        //     }
-        //     image=orderIsCompleted ? 'img/complete-order.jpg' : 'img/empty-cart.jpg'}
-        //   />
-        
+       
         }
               </div>
             </div>

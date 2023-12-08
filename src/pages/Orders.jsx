@@ -2,14 +2,19 @@ import React from 'react';
 import axios from 'axios';
 import Card from '../components/Card/Card';
 import Header from '../components/Header';
+import Drawer from '../components/Drawer/Drawer'
+import Footer from '../components/footer'
 import { useState, useEffect } from 'react';
 const API_URL = 'http://localhost:5005/api';
+import { AppContext } from "../components/AppProvider"
+import { useContext } from 'react'
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-
+  const [orderIsCompleted, setOrder] = useState(false);
+  const { cartOpened, setCartOpened } = useContext(AppContext);
+  const {cartitems, setCartItems} = useContext(AppContext);
 
   useEffect(() => {
     (async () => {
@@ -29,10 +34,13 @@ function Orders() {
 
   return (
     <div className="wrapper clear">
-      <Header />
+      <Header onClickCart={()=> setCartOpened(true)}/>
+      <Drawer 
+   items={cartitems} 
+   onCloseCart={()=>setCartOpened(false)}/> 
       <div className="content p-40">
         <div className="d-flex align-center justify-between mb-40">
-          <h1>Мои заказы</h1>
+          <h1> My orders </h1>
         </div>
 
         <div className="d-flex flex-wrap">
@@ -40,7 +48,7 @@ function Orders() {
             ? [...Array(8)]
             : orders.map((order, orderIndex) => (
                 <div key={orderIndex} className="order-container">
-                  <h2>Заказ №{orderIndex + 1}</h2>
+                  <h2>Order №{orderIndex + 1}</h2>
                   {orders ? (
                     order.map((item, itemIndex) => (
                       <Card
@@ -51,12 +59,13 @@ function Orders() {
                       />
                     ))
                   ) : (
-                    <p>Нет товаров в этом заказе</p>
+                    <p>No orders</p>
                   )}
                 </div>
               ))}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }
