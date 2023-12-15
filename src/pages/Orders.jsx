@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import Drawer from '../components/Drawer/Drawer'
 import Footer from '../components/Footer'
 import { useState, useEffect } from 'react';
-const API_URL = 'http://localhost:5005/api';
+const API_URL = 'https://react-sneakers-node.onrender.com';
 import { AppContext } from "../components/AppProvider"
 import { useContext } from 'react'
 

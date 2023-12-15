@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { AppContext } from "../AppProvider"
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5005/api'
+const API_URL = 'https://react-sneakers-node.onrender.com'
 import styles from './Drawer.module.scss';
 
 function Drawer({onCloseCart, items = [], onDeleteFromCart,  onDelete}) {
