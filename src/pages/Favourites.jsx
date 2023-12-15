@@ -6,7 +6,7 @@ import Card from '../components/Card/Card'
 import Header from '../components/Header'
 import Drawer from '../components/Drawer/Drawer'
 const API_URL = 'http://localhost:5005/api'
-import Footer from '../components/footer'
+import Footer from '../components/Footer'
 import { AppContext } from "../components/AppProvider"
 import { useContext } from 'react'
 
