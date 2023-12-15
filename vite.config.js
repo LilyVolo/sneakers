@@ -10,7 +10,7 @@ export default defineConfig({
     proxy: {
 
       '/api': {
-        target: 'http://localhost:5005/api',
+        target: 'https://react-sneakers-node.onrender.com/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''), // Remove "/gapi" prefix
       },
