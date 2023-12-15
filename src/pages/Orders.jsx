@@ -3,7 +3,7 @@ import axios from 'axios';
 import Card from '../components/Card/Card';
 import Header from '../components/Header';
 import Drawer from '../components/Drawer/Drawer'
-import Footer from '../components/footer'
+import Footer from '../components/Footer'
 import { useState, useEffect } from 'react';
 const API_URL = 'http://localhost:5005/api';
 import { AppContext } from "../components/AppProvider"
